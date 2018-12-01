@@ -10,7 +10,7 @@ public class Health : NetworkBehaviour {
     [SyncVar (hook = "OnChangeHealth")] public int CurrentHealth;
 
     public RectTransform HealthBar;
-
+    public bool DestroyOnDeath;
 
     public void Start()
     {
@@ -27,9 +27,18 @@ public class Health : NetworkBehaviour {
         CurrentHealth -= amount;
         if (CurrentHealth <= 0)
         {
-            CurrentHealth = MaxHealth;
-            
-            RpcRespawn();
+            if (DestroyOnDeath) // for enemies or those that dont respawn
+            {
+                Destroy(gameObject);
+            }
+            else // for players or those that do respawn.
+            {
+                CurrentHealth = MaxHealth;
+
+                RpcRespawn();
+            }
+
+
         }
 
         HealthBar.sizeDelta = new Vector2(CurrentHealth, HealthBar.sizeDelta.y);

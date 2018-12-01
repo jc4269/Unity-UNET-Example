@@ -431,6 +431,7 @@ MonoBehaviour:
   MaxHealth: 100
   CurrentHealth: 0
   HealthBar: {fileID: 224322216020196610}
+  DestroyOnDeath: 1
 --- !u!114 &114524712935265114
 MonoBehaviour:
   m_ObjectHideFlags: 1
