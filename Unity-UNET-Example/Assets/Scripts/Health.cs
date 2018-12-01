@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class Health : MonoBehaviour {
+public class Health : NetworkBehaviour {
 
     public int MaxHealth = 100;
-    public int CurrentHealth;
+    [SyncVar (hook = "OnChangeHealth")] public int CurrentHealth;
 
     public RectTransform HealthBar;
 
@@ -18,6 +19,11 @@ public class Health : MonoBehaviour {
 
     public void TakeDamage(int amount)
     {
+        if (!isServer)
+        {
+            return;
+        }
+
         CurrentHealth -= amount;
         if (CurrentHealth <= 0)
         {
@@ -26,5 +32,10 @@ public class Health : MonoBehaviour {
         }
 
         HealthBar.sizeDelta = new Vector2(CurrentHealth, HealthBar.sizeDelta.y);
+    }
+
+    void OnChangeHealth(int health)
+    {
+        HealthBar.sizeDelta = new Vector2(health, HealthBar.sizeDelta.y);
     }
 }
